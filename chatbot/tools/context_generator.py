@@ -301,7 +301,7 @@ def main():
     parser.add_argument(
         "--input_dir",
         type=str,
-        default="./input_documents",
+        default="../input_documents",
         help="Directory containing input documents (PDF, DOCX, IPYNB, TXT)"
     )
     
@@ -335,6 +335,8 @@ def main():
     files = [os.path.join(args.input_dir, f) for f in os.listdir(args.input_dir) 
              if os.path.isfile(os.path.join(args.input_dir, f))]
     
+    logger.info(f"Found {len(files)} files in {args.input_dir}: {files}")
+    
     if not files:
         logger.warning(f"No files found in {args.input_dir}")
         return
@@ -342,10 +344,16 @@ def main():
     # Extract text from all files
     extracted_texts = []
     for file_path in files:
+        logger.info(f"Processing file: {file_path}")
         result = extract_text_from_file(file_path)
         if result:
             text, source_name = result
+            logger.info(f"Successfully extracted text from {file_path}, source: {source_name}")
             extracted_texts.append((text, source_name))
+        else:
+            logger.warning(f"Failed to extract text from {file_path}")
+    
+    logger.info(f"Extracted text from {len(extracted_texts)} files")
     
     if not extracted_texts:
         logger.warning("No text could be extracted from the provided files")

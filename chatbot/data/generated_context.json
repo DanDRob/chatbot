@@ -1,0 +1,34 @@
+[
+  {
+    "id": "example_innovation_metrics_1",
+    "content": "# Canadian Innovation Policy Brief\n\n## Recent Innovation Metrics\n\nCanada's Global Innovation Index (GII) ranking has remained relatively stable in recent years, holding at the 16th position globally in 2023. While this represents moderate performance compared to other advanced economies, it masks some concerning trends. Canada excels in educational quality, market sophistication, and institutional frameworks, but continues to lag in R&D intensity, patent production, and knowledge diffusion metrics.\n\nThe latest data shows Canada's R&D spending at approximately 1.7% of GDP, significantly below the OECD average of 2.5%. This underinvestment is particularly pronounced in the private sector, where R&D spending has declined over the past decade in several industries except for information technology, pharmaceuticals, and aerospace.\n\n## Provincial Innovation Policies",
+    "metadata": {
+      "source": "example",
+      "topic": "innovation_metrics"
+    }
+  },
+  {
+    "id": "example_r&d_intensity_2",
+    "content": " in the private sector, where R&D spending has declined over the past decade in several industries except for information technology, pharmaceuticals, and aerospace.\n\n## Provincial Innovation PoliciesProvincial innovation landscapes across Canada show significant variation, creating a complex patchwork of policies and supports. British Columbia and Ontario have established dedicated innovation ministries with specialized programs targeting emerging technology sectors. Quebec offers the most generous R&D tax incentives in the country, which has successfully attracted investment in industries such as artificial intelligence and video game development.\n\nThe Prairie provinces have focused their innovation strategies on agricultural technology and clean energy, while the Atlantic provinces are developing specialized ocean technology clusters. This regional specialization creates strengths in specific sectors but poses challenges for national coordination.\n\n## Talent Development and Retention",
+    "metadata": {
+      "source": "example",
+      "topic": "r&d_intensity"
+    }
+  },
+  {
+    "id": "example_innovation_metrics_3",
+    "content": "eveloping specialized ocean technology clusters. This regional specialization creates strengths in specific sectors but poses challenges for national coordination.\n\n## Talent Development and RetentionAccess to skilled talent consistently ranks as the primary challenge for innovative companies in Canada according to recent industry surveys. The talent shortage is particularly acute in artificial intelligence, quantum computing, and clean technology sectors, where global competition for specialized skills is intense.\n\nWhile Canada's universities produce world-class graduates, retention remains problematic, with an estimated 65% of software engineering graduates from top Canadian universities accepting positions in the United States within five years of graduation. This \"brain drain\" significantly impacts the growth potential of Canadian technology firms.\n\n## Recommendations for Policy Improvement\n\nBased on comparative analysis with innovation leaders such as Israel, South Korea, and Finland, the following recommendations emerge for improving Canada's innovation performance:",
+    "metadata": {
+      "source": "example",
+      "topic": "innovation_metrics"
+    }
+  },
+  {
+    "id": "example_innovation_metrics_4",
+    "content": " Policy Improvement\n\nBased on comparative analysis with innovation leaders such as Israel, South Korea, and Finland, the following recommendations emerge for improving Canada's innovation performance:1. Increase direct R&D funding through simplified grant processes that reduce administrative burden for SMEs\n2. Enhance commercialization support to bridge the gap between academic research and market applications\n3. Expand talent retention programs through competitive tax incentives for high-demand technical roles\n4. Create regulatory sandboxes for emerging technologies to accelerate testing and deployment\n5. Develop a national coordination framework that maintains provincial autonomy while enabling cross-provincial collaboration on strategic sectors",
+    "metadata": {
+      "source": "example",
+      "topic": "innovation_metrics"
+    }
+  }
+]

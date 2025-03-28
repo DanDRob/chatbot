@@ -7,11 +7,11 @@ from typing import Dict, List, Any
 import streamlit as st
 
 # Add the root directory to the path for local imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Import backend modules (for direct integration without API)
-from backend.rag_module import RAGManager
-from backend.app import handle_chat_query
+from chatbot.backend.rag_module import RAGManager
+from chatbot.backend.app import handle_chat_query
 
 # Configure logging
 logging.basicConfig(

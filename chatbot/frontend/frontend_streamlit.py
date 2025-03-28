@@ -14,7 +14,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Import backend modules (for direct integration without API)
-from chatbot.backend.rag_module import RAGManager, load_and_index_sample_context
+from chatbot.backend.rag_module import RAGManager
 from chatbot.backend.app import handle_chat_query
 
 # Configure logging
@@ -41,6 +41,13 @@ def initialize_session_state():
         st.session_state.messages = []
     if "sources" not in st.session_state:
         st.session_state.sources = {}
+    if "db_initialized" not in st.session_state:
+        # Only initialize the database once on first load
+        from chatbot.backend.rag_module import load_and_index_sample_context
+        with st.spinner("Initializing knowledge base (this may take a minute)..."):
+            load_and_index_sample_context()
+        st.session_state.db_initialized = True
+        st.success("Knowledge base initialized successfully!")
 
 def display_chat_header():
     """Display the chat header with title and project information."""
@@ -96,9 +103,6 @@ def query_backend_api(user_query: str) -> Dict[str, Any]:
 
 def main():
     """Main function to run the Streamlit app."""
-    # Initialize the vector database with sample context
-    load_and_index_sample_context()
-    
     # Initialize session state
     initialize_session_state()
     

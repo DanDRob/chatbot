@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app
 app = Flask(__name__)
 
-# Initialize RAG manager
-rag_manager = RAGManager()
+# Initialize RAG manager - use specific collection_name to match the one from load_and_index_sample_context()
+rag_manager = RAGManager(collection_name="canada_innovation_strategy")
 
 def construct_prompt(user_query: str, context_docs: list) -> str:
     """

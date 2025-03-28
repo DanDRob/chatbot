@@ -41,13 +41,13 @@ def initialize_session_state():
         st.session_state.messages = []
     if "sources" not in st.session_state:
         st.session_state.sources = {}
-    if "db_initialized" not in st.session_state:
+    #if "db_initialized" not in st.session_state:
         # Only initialize the database once on first load
-        from chatbot.backend.rag_module import load_and_index_sample_context
-        with st.spinner("Initializing knowledge base (this may take a minute)..."):
-            load_and_index_sample_context()
-        st.session_state.db_initialized = True
-        st.success("Knowledge base initialized successfully!")
+    #    from chatbot.backend.rag_module import load_and_index_sample_context
+    #    with st.spinner("Initializing knowledge base (this may take a minute)..."):
+    #        load_and_index_sample_context()
+    #    st.session_state.db_initialized = True
+    #    st.success("Knowledge base initialized successfully!")
 
 def display_chat_header():
     """Display the chat header with title and project information."""

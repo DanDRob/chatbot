@@ -4,6 +4,7 @@ import numpy as np
 from typing import Optional, Dict, Any
 import google.generativeai as genai
 from dotenv import load_dotenv
+import streamlit as st
 
 # Configure logging
 logging.basicConfig(
@@ -15,8 +16,23 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
-# Get API key from environment
-api_key = os.getenv("GOOGLE_API_KEY")
+# Try to get API key from multiple sources (Streamlit secrets, environment variables)
+api_key = None
+
+# First try Streamlit secrets (for deployment)
+try:
+    if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets:
+        api_key = st.secrets['GOOGLE_API_KEY']
+        logger.info("Using API key from Streamlit secrets")
+except Exception as e:
+    logger.warning(f"Could not load from Streamlit secrets: {str(e)}")
+
+# Fallback to environment variables (for local development)
+if not api_key:
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if api_key:
+        logger.info("Using API key from environment variables")
+
 USE_MOCK = api_key is None or api_key == "your_google_api_key_here"
 if USE_MOCK:
     logger.warning("No valid API key found. Using mock responses for development purposes.")

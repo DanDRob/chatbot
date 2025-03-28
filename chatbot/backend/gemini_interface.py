@@ -23,7 +23,7 @@ api_key = None
 try:
     if hasattr(st, 'secrets') and 'GOOGLE_API_KEY' in st.secrets:
         api_key = st.secrets['GOOGLE_API_KEY']
-        logger.info("Using API key from Streamlit secrets")
+        logger.warning("Using API key from Streamlit secrets")
 except Exception as e:
     logger.warning(f"Could not load from Streamlit secrets: {str(e)}")
 
@@ -31,7 +31,7 @@ except Exception as e:
 if not api_key:
     api_key = os.getenv("GOOGLE_API_KEY")
     if api_key:
-        logger.info("Using API key from environment variables")
+        logger.warning("Using API key from environment variables")
 
 USE_MOCK = api_key is None or api_key == "your_google_api_key_here"
 if USE_MOCK:

@@ -34,7 +34,6 @@ env/
 *.swo
 
 # Application specific
-data/chroma_db/
 .env
 
 # Streamlit

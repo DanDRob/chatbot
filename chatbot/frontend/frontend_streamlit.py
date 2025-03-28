@@ -6,6 +6,10 @@ import requests
 from typing import Dict, List, Any
 import streamlit as st
 
+# Fix for SQLite version issues (must come before chromadb import)
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 # Add the root directory to the path for local imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 

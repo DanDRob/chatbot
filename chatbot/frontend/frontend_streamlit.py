@@ -14,7 +14,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # Import backend modules (for direct integration without API)
-from chatbot.backend.rag_module import RAGManager
+from chatbot.backend.rag_module import RAGManager, load_and_index_sample_context
 from chatbot.backend.app import handle_chat_query
 
 # Configure logging
@@ -96,6 +96,9 @@ def query_backend_api(user_query: str) -> Dict[str, Any]:
 
 def main():
     """Main function to run the Streamlit app."""
+    # Initialize the vector database with sample context
+    load_and_index_sample_context()
+    
     # Initialize session state
     initialize_session_state()
     

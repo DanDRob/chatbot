@@ -76,20 +76,23 @@ def display_chat_messages():
                         for source in sources:
                             st.markdown(f"**Topic:** {source['topic']}")
 
-def query_backend_api(user_query: str) -> Dict[str, Any]:
+def query_backend_api(user_query: str, history: List[Dict[str, str]]) -> Dict[str, Any]: # Add history parameter
     """
-    Query the backend API with a user question.
+    Query the backend API with a user question and chat history.
     
     Args:
         user_query: The user's question
+        history: The list of previous chat messages
         
     Returns:
         Response dictionary with answer and sources
     """
     try:
+        payload = {"query": user_query, "history": history} # Include history in payload
         response = requests.post(
             f"{API_URL}/api/chat",
-            json={"query": user_query},
+            # json={"query": user_query}, # Old payload
+            json=payload,                 # New payload
             headers={"Content-Type": "application/json"}
         )
         response.raise_for_status()
@@ -103,53 +106,44 @@ def query_backend_api(user_query: str) -> Dict[str, Any]:
 
 def main():
     """Main function to run the Streamlit app."""
-    # Initialize session state
     initialize_session_state()
-    
-    # Display chat header
     display_chat_header()
-    
-    # Display chat message history
     display_chat_messages()
     
-    # Chat input
     if user_query := st.chat_input("Ask about Canada's innovation strategy..."):
-        # Add user message to chat history
+        current_history = st.session_state.messages # Get current history before appending new user message
+        
         st.session_state.messages.append({"role": "user", "content": user_query})
         
-        # Display the user message
         with st.chat_message("user", avatar="🧑‍💻"):
             st.markdown(user_query)
         
-        # Display a placeholder for the assistant's response
         with st.chat_message("assistant", avatar="🍁"):
             message_placeholder = st.empty()
             
             with st.spinner("Thinking..."):
                 if API_MODE:
-                    # Call backend API
-                    response = query_backend_api(user_query)
+                    # Pass the history *before* the current user message was added
+                    response = query_backend_api(user_query, current_history) 
                 else:
-                    # Call backend function directly
-                    response = handle_chat_query(user_query)
+                    # Pass the history *before* the current user message was added
+                    # NOTE: Need to update handle_chat_query signature in app.py as well
+                    response = handle_chat_query(user_query, current_history) # Pass history directly
                 
                 answer = response.get("answer", "I'm sorry, I couldn't process your request.")
                 sources = response.get("sources", [])
             
-            # Update placeholder with the response
             message_placeholder.markdown(answer)
         
-        # Generate a unique message ID
         message_id = f"msg_{len(st.session_state.messages)}"
         
-        # Add assistant message to chat history
+        # Add assistant message AFTER getting the response
         st.session_state.messages.append({
             "role": "assistant",
             "content": answer,
             "message_id": message_id
         })
         
-        # Store sources in session state
         st.session_state.sources[message_id] = sources
         
         # Display sources below the assistant's response if available

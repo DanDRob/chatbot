@@ -171,7 +171,7 @@ class RAGManager:
     def retrieve_relevant_context(
         self, 
         query: str, 
-        top_k: int = 3, 
+        top_k: int = 4, 
         filter_metadata: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """

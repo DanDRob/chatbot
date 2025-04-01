@@ -223,14 +223,61 @@ def extract_topics(chunk: str) -> List[str]:
     
     # Define keyword mappings for topics
     topic_keywords = {
-        "innovation_metrics": ["innovation index", "ranking", "performance", "metrics", "indicators"],
-        "r&d_intensity": ["r&d", "research and development", "spending", "investment", "gdp"],
-        "policy_analysis": ["policy", "plan", "strategy", "government", "federal", "program"],
-        "regional_policies": ["provincial", "region", "quebec", "ontario", "british columbia", "alberta"],
-        "talent_factors": ["talent", "skills", "education", "workforce", "recruitment", "retention"],
-        "funding_factors": ["funding", "venture capital", "investment", "financing", "capital"],
-        "sentiment_results": ["sentiment", "perception", "opinion", "coverage", "media"],
-        "recommendations": ["recommend", "suggestion", "improve", "enhance", "future", "strategy"]
+    "innovation_metrics": [
+        "innovation index", "ranking", "performance", "metrics", "indicators",
+        "gii", "global innovation index", "benchmark", "rank", "wipo"
+        ],
+    "r&d_intensity": [
+        "r&d", "research and development", "spending", "investment", "gdp",
+        "berd", "business expenditure", "research & development"
+        ],
+    "policy_analysis": [
+        "policy", "plan", "strategy", "government", "federal", "program",
+        "initiative", "regulation", "deregulation", "legislation", "framework",
+        "ita", "innovation tax advantage", "tci", "talent canada initiative",
+        "seiia", "strategic energy infrastructure", "sr&ed", "ised", "oitc",
+        "isc", "innovative solutions canada", "sbir", "tax credit", "tax break",
+        "procurement", "public procurement", "jenkins report", "advisory council"
+        ],
+    "regional_policies": [
+        "provincial", "region", "quebec", "ontario", "british columbia", "alberta",
+        "territorial", "regional energy hubs"
+        ],
+    "talent_factors": [
+        "talent", "skills", "education", "workforce", "recruitment", "retention",
+        "brain drain", "emigration", "skilled workers", "human capital", "stem",
+        "compensation", "wages", "salary", "housing", "global talent stream",
+        "express entry", "lmia", "re-entry"
+        ],
+    "funding_factors": [
+        "funding", "venture capital", "investment", "financing", "capital",
+        "vc", "seed funding", "series b", "late-stage", "early-stage",
+        "capital gains", "subsidy", "grant", "incentive", "matching investment"
+        ],
+    "recommendations": [
+        "recommend", "suggestion", "improve", "enhance", "future", "strategy",
+        "proposal", "should", "must", "roadmap", "action", "path"
+        ],
+    "commercialization": [
+        "commercialization", "market access", "scale-up", "startup growth", "unicorns",
+        "product to market", "late-stage funding", "early-stage funding", 
+        "patent", "patenting", "intellectual property", "ip", "pct" 
+        ],
+    "competitiveness_comparison": [
+        "comparison", "benchmark", "vs", "versus", "global leaders", "oecd",
+        "usa", "united states", "singapore", "switzerland", "uk", "eu",
+        "china", "japan", "korea", "israel", "germany", "france"
+        ],
+    "specific_sectors": [
+        "ai", "artificial intelligence", "biotech", "biotechnology", "clean tech",
+        "quantum computing", "semiconductor", "chips act", "fintech", "digital",
+        "advanced manufacturing", "deep-tech", "high-tech"
+        ],
+     "energy_infrastructure": [
+         "energy", "electricity", "grid", "infrastructure", "power quality",
+         "data center", "consumption", "hydropower", "nuclear", "kwh",
+         "seiia", "regional energy hubs", "grid modernization"
+         ]
     }
     
     # Check for each topic's keywords in the chunk
@@ -301,14 +348,14 @@ def main():
     parser.add_argument(
         "--input_dir",
         type=str,
-        default="../input_documents",
+        default="./input_documents",
         help="Directory containing input documents (PDF, DOCX, IPYNB, TXT)"
     )
     
     parser.add_argument(
         "--output_file",
         type=str,
-        default="../data/generated_context.json",
+        default="./data/generated_context.json",
         help="Output JSON file path for the generated context data"
     )
     

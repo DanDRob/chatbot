@@ -43,8 +43,8 @@ else:
 def get_gemini_response(
     prompt: str, 
     model_name: str = "gemini-1.5-flash-latest",
-    temperature: float = 0.2,
-    max_output_tokens: int = 2048,
+    temperature: float = 0.3,
+    max_output_tokens: int = 4096,
     safety_settings: Optional[Dict[str, Any]] = None
 ) -> str:
     """

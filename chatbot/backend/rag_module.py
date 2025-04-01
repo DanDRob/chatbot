@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 try:
     BASE_DIR = Path(__file__).resolve().parent.parent.parent
 except NameError:
-    # Fallback if __file__ is not defined (e.g., interactive environment)
     BASE_DIR = Path('.').resolve()
 
 # ChromaDB settings
@@ -52,7 +51,6 @@ class RAGManager:
 
         logger.info(f"Initializing RAGManager with DB: '{self.db_directory}', Collection: '{self.collection_name}'")
 
-        
         # Ensure DB directory exists
         try:
             Path(self.db_directory).mkdir(parents=True, exist_ok=True) # Use pathlib
@@ -75,7 +73,7 @@ class RAGManager:
         if not self.use_gemini_embeddings:
             # Use sentence-transformers for embeddings
             self.ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-                model_name="all-MiniLM-L6-v2"
+                model_name="all-mpnet-base-v2"
             )
         else:
             # Use Gemini embeddings (custom function)
@@ -223,13 +221,12 @@ class RAGManager:
                 return []
 
 
-            # Format the results (with safety checks)
             documents = []
             num_results = len(results["documents"][0])
             ids = results["ids"][0] if results.get("ids") and results["ids"] else [None] * num_results
             metadatas = results["metadatas"][0] if results.get("metadatas") and results["metadatas"] else [{}] * num_results
             distances = results["distances"][0] if results.get("distances") and results["distances"] else [None] * num_results
-            contents = results["documents"][0] # Already checked this exists
+            contents = results["documents"][0]
 
             for i in range(num_results):
                  documents.append({
@@ -244,11 +241,7 @@ class RAGManager:
             return documents
 
         except Exception as e:
-            # Log the specific error during retrieval
             logger.error(f"Error retrieving context from collection '{self.collection_name}': {e}", exc_info=True)
-            # Check for specific ChromaDB errors if possible, e.g., collection not found
-            # Re-raising for now, could return [] depending on desired behavior
-            # raise # Re-raising might hide the warning in app.py, returning empty list might be better
             return [] # Return empty list on error to allow app.py warning
         
 
@@ -307,8 +300,6 @@ def load_and_index_sample_context() -> None:
         # Initialize the RAG manager (uses configured path/name from env vars/defaults)
         logger.info("Initializing RAGManager for indexing...")
         rag_manager = RAGManager()
-
-        # Delete existing collection if it exists (with logging)
         try:
             logger.warning(f"Attempting to delete existing collection: '{rag_manager.collection_name}' before re-indexing.")
             rag_manager.client.delete_collection(rag_manager.collection_name)
@@ -339,7 +330,5 @@ def load_and_index_sample_context() -> None:
 
     except Exception as e:
         logger.error(f"--- Error during Context Indexing Process ---: {e}", exc_info=True)
-        # Decide if we should raise the exception or just log it
-        # raise # Optional: re-raise if indexing failure should stop the app
 
 logger.debug(f"BASE_DIR calculated as: {BASE_DIR}")

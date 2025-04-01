@@ -34,7 +34,7 @@ def construct_prompt(user_query: str, context_docs: list) -> str:
     # Define the chatbot persona
     persona = (
         "You are an AI assistant knowledgeable about Canada's innovation strategy, "
-        "based on analysis from the MIE1624 project. You provide concise, accurate "
+        "based on analysis from the project. You provide concise, accurate "
         "information based only on the provided context."
     )
     

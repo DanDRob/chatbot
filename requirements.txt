@@ -13,3 +13,4 @@ PyPDF2>=3.0.0
 python-docx>=0.8.11
 nltk>=3.8.1
 pysqlite3-binary>=0.4.7 
+spacy>=3.5.0

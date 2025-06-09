@@ -5,6 +5,7 @@ import logging
 import requests
 from typing import Dict, List, Any
 import streamlit as st
+import pysqlite3
 
 # Fix for SQLite version issues (must come before chromadb import)
 __import__('pysqlite3')

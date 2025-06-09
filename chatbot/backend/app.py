@@ -77,41 +77,49 @@ YOUR RESPONSE:"""
     return prompt
 
 def handle_chat_query(user_query: str, history: List[Dict[str, str]] = None) -> Dict[str, Any]:
-    """
-    Handle a chat query by retrieving context, incorporating history, and generating a response.
-    
-    Args:
-        user_query: The user's question
-        history: List of previous chat messages (optional)
-        
-    Returns:
-        Response dictionary with answer
-    """
     try:
         logger.info(f"Processing chat query: {user_query}")
         if history:
-             logger.info(f"Received history with {len(history)} messages.")
+            logger.info(f"Received history with {len(history)} messages.")
 
-        # Retrieve context based on the CURRENT query only
-        context_docs = rag_manager.retrieve_relevant_context(user_query, top_k=4) # Using k=4 as in your provided code
+        context_docs = rag_manager.retrieve_relevant_context(user_query, top_k=5)
         
         if not context_docs:
             logger.warning("No relevant context found for query")
-            # Provide a generic response if no context is found, history doesn't help here usually
             return {
                 "answer": "I don't have specific information about that in my knowledge base. Could you try asking about Canada's innovation strategy, R&D factors, or policy recommendations?",
                 "sources": []
             }
         
-        # Construct prompt with the current query, retrieved context, AND history
-        prompt = construct_prompt(user_query, context_docs, history) # Pass history
-        
-        # Get response from Gemini using the combined prompt
+        prompt = construct_prompt(user_query, context_docs, history)
         response = get_gemini_response(prompt)
         
-        # Prepare source references (based on context retrieved for the *current* query)
-        sources = [{"id": doc["id"], "topic": doc["metadata"]["topic"]} for doc in context_docs]
-        
+        # Updated sources preparation
+        sources = []
+        for doc in context_docs:
+            valid_topics = []
+            if "topics" in doc["metadata"] and isinstance(doc["metadata"]["topics"], list):
+                valid_topics = [
+                    topic for topic in doc["metadata"]["topics"]
+                    if isinstance(topic, dict) and "confidence" in topic and "name" in topic
+                ]
+            
+            topic_name = "general"
+            if valid_topics:
+                try:
+                    # Find the topic with the highest confidence
+                    best_topic = max(valid_topics, key=lambda x: x["confidence"])
+                    topic_name = best_topic["name"]
+                except (ValueError, TypeError): 
+                    # Handle potential errors if confidence is not comparable or list is empty after filtering
+                    logger.warning(f"Could not determine best topic for doc id {doc.get('id', 'N/A')}, defaulting to 'general'. Topics: {doc['metadata'].get('topics', 'N/A')}")
+                    topic_name = "general"
+
+            sources.append({
+                "id": doc.get("id", "N/A"), # Use .get for safety
+                "topic": topic_name
+            })
+
         logger.info("Successfully generated response for chat query")
         return {
             "answer": response,
@@ -119,9 +127,9 @@ def handle_chat_query(user_query: str, history: List[Dict[str, str]] = None) -> 
         }
         
     except Exception as e:
-        logger.error(f"Error handling chat query: {str(e)}", exc_info=True) # Added exc_info for better debugging
+        logger.error(f"Error handling chat query: {str(e)}", exc_info=True)
         return {
-            "answer": f"I'm sorry, I encountered an error while processing your request.", # Simplified error message
+            "answer": "I'm sorry, I encountered an error while processing your request.",
             "sources": []
         }
 

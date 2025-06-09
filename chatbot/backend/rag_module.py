@@ -133,6 +133,59 @@ class RAGManager:
         try:
             ids = [doc["id"] for doc in documents]
             contents = [doc["content"] for doc in documents]
+            # Serialize metadata fields that might be lists or complex objects
+            metadatas = []
+            for doc in documents:
+                metadata = doc["metadata"]
+                serialized_metadata = {}
+                for key, value in metadata.items():
+                    if isinstance(value, (list, dict)):  # If value is a list or dict, serialize it
+                        serialized_metadata[key] = json.dumps(value)
+                    else:  # Otherwise, keep it as is (assuming it's str, int, float, bool)
+                        serialized_metadata[key] = value
+                metadatas.append(serialized_metadata)
+            
+            logger.info(f"Attempting to add {len(documents)} documents to collection '{self.collection_name}'...")
+
+            # Handle embeddings differently based on embedding function choice
+            if self.use_gemini_embeddings:
+                logger.info("Generating embeddings via Gemini...")
+                embeddings = self._embed_with_gemini(contents)
+                logger.info("Embeddings generated. Adding documents with embeddings...")
+                self.collection.add(
+                    ids=ids,
+                    documents=contents,
+                    metadatas=metadatas,
+                    embeddings=embeddings
+                )
+            else:
+                logger.info("Adding documents (embeddings handled by Chroma)...")
+                self.collection.add(
+                    ids=ids,
+                    documents=contents,
+                    metadatas=metadatas
+                )
+                    
+            logger.info(f"Successfully added {len(documents)} documents to collection")
+            
+        except Exception as e:
+            logger.error(f"Error adding documents to vector database: {str(e)}")
+            raise
+
+    '''
+    def add_documents(self, documents: List[Dict[str, Any]]) -> None:
+        """
+        Add documents to the vector database.
+        
+        Args:
+            documents: List of document dictionaries with id, content, and metadata
+        """
+        if not documents:
+            logger.warning("add_documents called with empty document list.")
+            return
+        try:
+            ids = [doc["id"] for doc in documents]
+            contents = [doc["content"] for doc in documents]
             metadatas = [doc["metadata"] for doc in documents]
             logger.info(f"Attempting to add {len(documents)} documents to collection '{self.collection_name}'...")
 
@@ -167,11 +220,12 @@ class RAGManager:
         except Exception as e:
             logger.error(f"Error adding documents to vector database: {str(e)}")
             raise
+        '''
     
     def retrieve_relevant_context(
         self, 
         query: str, 
-        top_k: int = 4, 
+        top_k: int = 5, 
         filter_metadata: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
         """
